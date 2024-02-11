@@ -29,12 +29,12 @@ export type AnimeQueryParamsRatingType =
   | "rx";
 
 export type AnimeQueryParamsType = {
-  type: AnimeQueryParamsTypeType;
-  filter: AnimeQueryParamsFilterType;
-  rating: AnimeQueryParamsRatingType;
-  sfw: boolean;
-  page: number;
-  limit: number;
+  type?: AnimeQueryParamsTypeType;
+  filter?: AnimeQueryParamsFilterType;
+  rating?: AnimeQueryParamsRatingType;
+  sfw?: boolean;
+  page?: number;
+  limit?: number;
 };
 
 export type AnimeSeasonType = "summer" | "winter" | "spring" | "fall";
@@ -138,3 +138,77 @@ export type AnimeType = Omit<
   AnimeFullType,
   "relations" | "theme" | "external" | "streaming"
 >;
+
+export type AnimeCharacterImagesType = {
+  [field in keyof AnimeImagesType]: Omit<
+    AnimeImagesType[field],
+    "large_image_url"
+  >;
+};
+export type PeopleImagesType = {
+  jpg: {
+    image_url: AnimeCharacterImagesType["jpg"]["image_url"];
+  };
+};
+
+export type PersonType = {
+  mal_id: number;
+  url: string;
+  images: PeopleImagesType;
+  name: string;
+};
+
+export type AnimeCharacterType = {
+  character: {
+    mal_id: number;
+    url: string;
+    images: AnimeCharacterImagesType;
+    name: string;
+  };
+  role: string;
+  voice_actors: Array<{
+    person: PersonType;
+    language: string;
+  }>;
+};
+
+export type AnimeStaffType = {
+  person: PersonType;
+  positions: string[];
+};
+
+type UserImagesType = {
+  [key in keyof AnimeImagesType]: Omit<
+    AnimeImagesType[key],
+    "small_image_url" | "large_image_url"
+  >;
+};
+type UserMetaType = {
+  username: string;
+  url: string;
+  images: UserImagesType;
+};
+export type AnimeReactionsType = {
+  overall: number;
+  nice: number;
+  love_it: number;
+  funny: number;
+  confusing: number;
+  informative: number;
+  well_written: number;
+  creative: number;
+};
+export type AnimeReviewType = {
+  user: UserMetaType;
+  mal_id: string;
+  url: string;
+  type: string;
+  reactions: AnimeReactionsType;
+  date: string;
+  review: string;
+  score: number;
+  tags: string[];
+  is_spoiler: boolean;
+  is_preliminary: boolean;
+  episodes_watched: number;
+};
