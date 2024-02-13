@@ -50,11 +50,23 @@ export type AnimeImagesType = {
     large_image_url: string | null;
   };
 };
-export type AnimeTrailerType = {
+
+export type AnimeTrailerImagesType = {
+  image_url: string | null;
+  small_image_url: string | null;
+  medium_image_url: string | null;
+  large_image_url: string | null;
+  maximum_image_url: string | null;
+};
+export type AnimeTrailerBaseType = {
   youtube_id: string | null;
   url: string | null;
   embed_url: string | null;
 };
+export type AnimeTrailerType = {
+  images: AnimeTrailerImagesType;
+};
+
 export type AnimeTitleType = {
   type: string;
   title: string;
@@ -92,7 +104,7 @@ export type AnimeFullType = {
   mal_id: number;
   url: string;
   images: AnimeImagesType;
-  trailer: AnimeTrailerType;
+  trailer: AnimeTrailerBaseType;
   approved: boolean;
   titles: AnimeTitleType[];
   /** @deprecated use titles instead */
@@ -211,4 +223,75 @@ export type AnimeReviewType = {
   is_spoiler: boolean;
   is_preliminary: boolean;
   episodes_watched: number;
+};
+export type AnimeEpisodeType = {
+  mal_id: number;
+  url: string | null;
+  title: string;
+  title_japanese: string | null;
+  title_romanji: string | null;
+  duration: number | null;
+  aired: string | null;
+  filler: boolean;
+  recap: boolean;
+  synopsis: string | null;
+};
+export type AnimeEpisodeItemType = Omit<AnimeEpisodeType, "synopsis"> & {
+  forum_url: string | null;
+};
+
+export type AnimePromoVideoType = {
+  title: "string";
+  trailer: AnimeTrailerBaseType;
+};
+export type AnimeCommonImagesType = {
+  jpg: {
+    image_url: string | null;
+  };
+};
+export type AnimeEpisodeVideoType = {
+  mal_id: number;
+  url: "string";
+  title: "string";
+  episode: "string";
+  images: AnimeCommonImagesType;
+};
+export type AnimeMusicVideoType = {
+  title: string;
+  video: AnimeTrailerType;
+  meta: {
+    title: string | null;
+    author: string | null;
+  };
+};
+export type AnimeVideosType = {
+  promo: AnimePromoVideoType[];
+  episodes: AnimeEpisodeVideoType[];
+  music_videos: AnimeMusicVideoType[];
+};
+export type AnimeStatsType = {
+  watching: number;
+  completed: number;
+  on_hold: number;
+  dropped: number;
+  plan_to_watch: number;
+  total: number;
+  scores: Array<{
+    score: number;
+    votes: number;
+    percentage: number;
+  }>;
+};
+
+export type CommonMetaType = {
+  mal_id: number;
+  url: string;
+  title: string;
+};
+export type AnimeMetaType = CommonMetaType & {
+  images: AnimeImagesType;
+};
+export type MangaMetaType = AnimeMetaType;
+export type AnimeRecommendationType = {
+  entry: AnimeMetaType | MangaMetaType;
 };

@@ -10,10 +10,7 @@ function ReviewCard({ review, ...props }: ReviewCardType) {
   const { user, review: content, reactions } = review;
   return (
     <div
-      className={twMerge(
-        "flex gap-5 p-5 bg-gray-100 rounded-xl",
-        props.className,
-      )}
+      className={twMerge("flex gap-5 p-5 bg-white rounded-xl", props.className)}
     >
       <Avatar
         image={user.images.webp.image_url}
@@ -36,7 +33,7 @@ function ReviewCard({ review, ...props }: ReviewCardType) {
             </details>
           )}
         </div>
-        <ul className="flex flex-wrap py-5 gap-x-5 text-gray-400">
+        <ul className="flex flex-wrap py-5 gap-x-5 text-gray-500">
           {(Object.keys(reactions) as (keyof typeof reactions)[]).map((r) =>
             r === "overall" || reactions[r] === 0 ? null : (
               <li key={r}>

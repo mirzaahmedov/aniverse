@@ -6,6 +6,10 @@ import type {
   AnimeCharacterType,
   AnimeStaffType,
   AnimeReviewType,
+  AnimeEpisodeItemType,
+  AnimeVideosType,
+  AnimeStatsType,
+  AnimeRecommendationType,
 } from "@/types/anime";
 import { baseURL } from "./constants";
 
@@ -55,5 +59,25 @@ export async function getAnimeStaff(id: number) {
 export async function getAnimeReviews(id: number) {
   const response = await fetch(`${baseURL}/anime/${id}/reviews`);
   const data: MultiResultsType<AnimeReviewType> = await response.json();
+  return data;
+}
+export async function getAnimeEpisodes(id: number) {
+  const response = await fetch(`${baseURL}/anime/${id}/episodes`);
+  const data: MultiResultsType<AnimeEpisodeItemType> = await response.json();
+  return data;
+}
+export async function getAnimeVideos(id: number) {
+  const response = await fetch(`${baseURL}/anime/${id}/videos`);
+  const data: SingleResultType<AnimeVideosType> = await response.json();
+  return data;
+}
+export async function getAnimeStats(id: number) {
+  const response = await fetch(`${baseURL}/anime/${id}/statistics`);
+  const data: SingleResultType<AnimeStatsType> = await response.json();
+  return data;
+}
+export async function getAnimeRecommendations(id: number) {
+  const response = await fetch(`${baseURL}/anime/${id}/videos`);
+  const data: MultiResultsType<AnimeRecommendationType> = await response.json();
   return data;
 }

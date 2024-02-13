@@ -12,11 +12,13 @@ async function Characters({ params }: CharactersProps) {
   const characters = await getAnimeCharacters(id);
   const staff = await getAnimeStaff(id);
 
+  console.log(characters, staff);
+
   return (
     <div>
       <h4 className="sm-headline">Characters & Voice Actors</h4>
       <ul>
-        {Array.isArray(characters)
+        {Array.isArray(characters.data)
           ? characters.data.map((ch) => (
               <li key={ch.character.mal_id}>
                 <CharacterCard character={ch} />
@@ -26,7 +28,7 @@ async function Characters({ params }: CharactersProps) {
       </ul>
       <h4 className="sm-headline">Staff</h4>
       <ul>
-        {Array.isArray(staff)
+        {Array.isArray(staff.data)
           ? staff.data.map((ch) => (
               <li key={ch.person.mal_id}>
                 <StaffCard staff={ch} />
