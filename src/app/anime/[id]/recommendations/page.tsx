@@ -13,12 +13,14 @@ async function Recommendations({ params }: RecommendationsProps) {
   return (
     <div>
       <ul>
-        {recommendations.data.map((r) => (
-          <li key={r.entry.mal_id}>
-            <h6>{r.entry.title}</h6>
-            <Avatar image={r.entry.images.jpg.image_url} alt="image" />
-          </li>
-        ))}
+        {Array.isArray(recommendations?.data)
+          ? recommendations.data.map((r) => (
+              <li key={r.entry.mal_id}>
+                <h6>{r.entry.title}</h6>
+                <Avatar image={r.entry.images.jpg.image_url} alt="image" />
+              </li>
+            ))
+          : null}
       </ul>
     </div>
   );

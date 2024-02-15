@@ -3,8 +3,8 @@
 import { Anton } from "next/font/google";
 import { twMerge } from "tailwind-merge";
 import { usePathname } from "next/navigation";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
+import SearchField from "@/components/search-field";
 
 const anton = Anton({ weight: "400", subsets: ["latin"] });
 
@@ -57,16 +57,7 @@ function Header() {
             ))}
           </ul>
         </nav>
-        <div className="relative">
-          <input
-            placeholder="Search..."
-            type="text"
-            className="px-6 py-3 bg-gray-50 text-base rounded-xl outline-blue-500"
-          />
-          <button>
-            <MagnifyingGlassIcon className="absolute top-2.5 right-3 h-6 text-gray-400" />
-          </button>
-        </div>
+        <SearchField />
       </div>
     </header>
   );

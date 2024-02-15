@@ -21,6 +21,7 @@ function AnimeCard({ anime }: AnimeCard) {
             fill
             src={images.webp.large_image_url}
             alt={getAnimeTitle(titles, "English")}
+            className="object-center object-cover"
           />
         ) : null}
       </div>

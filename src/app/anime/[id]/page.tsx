@@ -21,8 +21,6 @@ async function AnimeDetails({ params }: AnimeDetailsProps) {
   const characters = await getAnimeCharacters(id);
   const reviews = await getAnimeReviews(id);
 
-  console.log(anime);
-
   if (!anime.data) {
     return null;
   }

@@ -26,3 +26,8 @@ export type LinkType = {
   name: string;
   url: string;
 };
+export type AnimeCommonImagesType = {
+  jpg: {
+    image_url: string | null;
+  };
+};

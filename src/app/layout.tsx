@@ -5,6 +5,7 @@ import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
+export const revalidate = 1000;
 export const metadata: Metadata = {
   title: "Aniverse | Anime watchlist",
   description: "Anime watchlist that uses unofficial myanimelist API jikan.moe",

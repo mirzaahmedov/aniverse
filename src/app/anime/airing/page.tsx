@@ -1,41 +1,19 @@
-import { getAnimeSearch } from "@/actions";
+import { getTopAnime } from "@/actions";
 import AnimeGrid from "@/components/anime-grid";
 import Pagination from "@/components/pagination";
-import Filters from "./filters";
 
-type AnimeProps = {
+type AiringProps = {
   searchParams: Record<string, string>;
 };
-async function Anime({ searchParams }: AnimeProps) {
-  const {
-    q = "naruto",
-    page = "1",
-    type,
-    score,
-    status,
-    producers,
-    start_date,
-    end_date,
-  } = searchParams;
-  const anime = await getAnimeSearch({
-    q,
-    page: page,
-    type,
-    score,
-    status,
-    producers,
-    start_date,
-    end_date,
-  });
-
-  console.log(anime);
+async function Airing({ searchParams }: AiringProps) {
+  const { page = "1" } = searchParams;
+  const anime = await getTopAnime({ filter: "airing", page: parseInt(page) });
 
   const { total, per_page } = anime.pagination.items;
   const pageCount = Math.ceil(total / per_page);
 
   return (
     <div>
-      <Filters />
       <h4 className="sm-headline">{total} results</h4>
       {Array.isArray(anime?.data) ? <AnimeGrid animes={anime.data} /> : null}
       <div className="py-20">
@@ -45,4 +23,4 @@ async function Anime({ searchParams }: AnimeProps) {
   );
 }
 
-export default Anime;
+export default Airing;

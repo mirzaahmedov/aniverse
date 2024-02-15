@@ -3,6 +3,7 @@ import type {
   MalURLType,
   RelationType,
   LinkType,
+  AnimeCommonImagesType,
 } from "./common";
 
 export type AnimeQueryParamsTypeType =
@@ -35,6 +36,27 @@ export type AnimeQueryParamsType = {
   sfw?: boolean;
   page?: number;
   limit?: number;
+};
+export type AnimeSearchQueryParamsType = {
+  sfw: boolean;
+  unapproved: boolean;
+  page: number;
+  limit: number;
+  q: string;
+  type: AnimeQueryParamsTypeType;
+  score: number;
+  min_score: number;
+  max_score: number;
+  status: AnimeStatusType;
+  rating: AnimeRatingType;
+  genres: string;
+  genres_exclude: string;
+  order_by: string;
+  sort: string;
+  letter: string;
+  producers: string;
+  start_date: string;
+  end_date: string;
 };
 
 export type AnimeSeasonType = "summer" | "winter" | "spring" | "fall";
@@ -243,11 +265,6 @@ export type AnimeEpisodeItemType = Omit<AnimeEpisodeType, "synopsis"> & {
 export type AnimePromoVideoType = {
   title: "string";
   trailer: AnimeTrailerBaseType;
-};
-export type AnimeCommonImagesType = {
-  jpg: {
-    image_url: string | null;
-  };
 };
 export type AnimeEpisodeVideoType = {
   mal_id: number;

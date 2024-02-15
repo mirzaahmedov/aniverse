@@ -1,4 +1,5 @@
 import { getTopAnime } from "@/actions";
+import Link from "next/link";
 import AnimeGrid from "@/components/anime-grid";
 
 export default async function Home() {
@@ -9,13 +10,33 @@ export default async function Home() {
 
   return (
     <main>
-      <h2 className="headline">Top airing</h2>
+      <h2 className="headline">
+        Top airing
+        <Link href="/anime/airing" className="text-base float-end">
+          More
+        </Link>
+      </h2>
       <AnimeGrid animes={topAiring.data} />
-      <h2 className="headline">Top upcoming</h2>
+      <h2 className="headline">
+        Top upcoming
+        <Link href="/anime/upcoming" className="text-base float-end">
+          More
+        </Link>
+      </h2>
       <AnimeGrid animes={topUpcoming.data} />
-      <h2 className="headline">Top popular</h2>
+      <h2 className="headline">
+        Top popular
+        <Link href="/anime/popular" className="text-base float-end">
+          More
+        </Link>
+      </h2>
       <AnimeGrid animes={topPopular.data} />
-      <h2 className="headline">Top favorite</h2>
+      <h2 className="headline">
+        Top favorite
+        <Link href="/anime/favorite" className="text-base float-end">
+          More
+        </Link>
+      </h2>
       <AnimeGrid animes={topFavorite.data} />
     </main>
   );

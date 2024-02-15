@@ -10,24 +10,27 @@ import type {
   AnimeVideosType,
   AnimeStatsType,
   AnimeRecommendationType,
+  AnimeSearchQueryParamsType,
 } from "@/types/anime";
 import { baseURL } from "./constants";
 
 export async function getAnimeSearch(
-  params: AnimeQueryParamsType & {
-    q: string;
-    min_score?: number;
-    max_score?: number;
-  },
+  params: Partial<Record<keyof AnimeSearchQueryParamsType, string>>,
 ) {
   const q = encodeURIComponent(params.q || "");
   const page = encodeURIComponent(params.page || 1);
   const limit = encodeURIComponent(params.limit || 12);
+  const type = encodeURIComponent(params.type || "");
+  const score = encodeURIComponent(params.score || "");
+  const status = encodeURIComponent(params.status || "");
+  const producers = encodeURIComponent(params.producers || "");
+  const start_date = encodeURIComponent(params.start_date || "");
+  const end_date = encodeURIComponent(params.end_date || "");
 
   const response = await fetch(
-    `${baseURL}/anime?q=${q}&page=${page}&limit=${limit}`,
+    `${baseURL}/anime?q=${q}&page=${page}&limit=${limit}&type=${type}&score=${score}&status=${status}&producers=${producers}&start_date=${start_date}&end_date=${end_date}`,
   );
-  const data = await response.json();
+  const data: MultiResultsType<AnimeType> = await response.json();
   return data;
 }
 export async function getTopAnime(params: AnimeQueryParamsType) {
