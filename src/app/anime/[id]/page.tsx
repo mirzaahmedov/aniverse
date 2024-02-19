@@ -1,28 +1,25 @@
+import type { AnimePageProps } from "./types";
 import Image from "next/image";
 import Link from "next/link";
 import { UserIcon } from "@heroicons/react/24/outline";
+import LinksList from "@/components/links-list";
 import ReviewCard from "@/components/review-card";
 import CharacterCard from "@/components/character-card";
 import {
   getAnimeFullById,
   getAnimeCharacters,
   getAnimeReviews,
-} from "@/actions";
+} from "@/actions/anime";
 import { getAnimeTitle } from "@/utils/anime";
 
-type AnimeDetailsProps = {
-  params: {
-    id: number;
-  };
-};
-async function AnimeDetails({ params }: AnimeDetailsProps) {
-  const { id } = params;
-  const anime = await getAnimeFullById(id);
+async function AnimeDetails({ params }: AnimePageProps) {
+  const id = parseInt(params.id);
+  const res = await getAnimeFullById(id);
   const characters = await getAnimeCharacters(id);
   const reviews = await getAnimeReviews(id);
 
-  if (!anime.data) {
-    return null;
+  if (!res.ok) {
+    throw new Error(res.message);
   }
 
   const {
@@ -36,16 +33,24 @@ async function AnimeDetails({ params }: AnimeDetailsProps) {
     season,
     year,
     studios,
-    type,
     synopsis,
     background,
-  } = anime.data;
+    type,
+    source,
+    episodes,
+    status,
+    genres,
+    producers,
+    streaming,
+    relations,
+    demographics,
+  } = res.result.data;
 
   return (
     <div className="mt-10">
       <div className="flex gap-20">
-        <div className="max-w-96">
-          <div className="relative w-96 h-[572px] shadow-2xl">
+        <div className="max-w-72">
+          <div className="relative w-72 h-[26rem] shadow-2xl">
             {images.webp?.large_image_url ? (
               <Image
                 fill
@@ -70,52 +75,52 @@ async function AnimeDetails({ params }: AnimeDetailsProps) {
             <ul>
               <li className="pt-2.5">
                 <span>Type</span>
-                <span className="float-end">{anime.data.type}</span>
+                <span className="float-end">{type}</span>
               </li>
               <li className="pt-2.5">
                 <span>Episodes</span>
-                <span className="float-end">{anime.data.episodes}</span>
+                <span className="float-end">{episodes}</span>
               </li>
               <li className="pt-2.5">
                 <span>Status</span>
-                <span className="float-end">{anime.data.status}</span>
+                <span className="float-end">{status}</span>
               </li>
               <li className="pt-2.5">
                 <span>Studios</span>
                 <span className="float-end">
-                  {anime.data.studios.map((s) => s.name).join(",")}
+                  <LinksList list={studios} />
                 </span>
               </li>
               <li className="pt-2.5">
                 <span>Genres</span>
                 <span className="float-end">
-                  {anime.data.genres.map((g) => g.name).join(",")}
+                  <LinksList list={genres} />
                 </span>
               </li>
               <li className="pt-2.5">
                 <span>Producers</span>
                 <span className="float-end text-right pb-2.5">
-                  {anime.data.producers.map((p) => p.name).join(",")}
+                  <LinksList list={producers} />
                 </span>
               </li>
               <li className="pt-2.5">
                 <span>Demographic</span>
                 <span className="float-end">
-                  {anime.data.demographics.map((d) => d.name).join(",")}
+                  <LinksList list={demographics} />
                 </span>
               </li>
               <li className="pt-2.5">
                 <span>Source</span>
-                <span className="float-end">{anime.data.source}</span>
+                <span className="float-end">{source}</span>
               </li>
             </ul>
           </div>
           <div className="mt-20">
             <h4 className="sm-headline">Streaming platforms</h4>
             <ul>
-              {anime.data.streaming.map((e) => (
+              {streaming.map((e) => (
                 <li key={e.name} className="pb-2.5">
-                  {e.name}
+                  <Link href={e.url ? e.url : ""}>{e.name}</Link>
                 </li>
               ))}
             </ul>
@@ -190,11 +195,11 @@ async function AnimeDetails({ params }: AnimeDetailsProps) {
           <div>
             <h4 className="sm-headline">Related</h4>
             <ul>
-              {anime.data.relations.map((r) => (
+              {relations.map((r) => (
                 <li key={r.relation} className="pt-2.5">
                   <span>{r.relation}</span>
                   <span className="float-end">
-                    {r.entry.map((e) => e.name).join(",")}
+                    <LinksList list={r.entry} />
                   </span>
                 </li>
               ))}
@@ -203,18 +208,20 @@ async function AnimeDetails({ params }: AnimeDetailsProps) {
           <div>
             <h4 className="sm-headline">Characters & Voice Actors</h4>
             <ul className="grid grid-cols-2 gap-10">
-              {characters.data.slice(0, 10).map((ch) => (
-                <li key={ch.character.mal_id} className="block pt-2.5">
-                  <CharacterCard character={ch} />
-                </li>
-              ))}
+              {characters.ok && Array.isArray(characters.result.data)
+                ? characters.result.data.slice(0, 10).map((ch) => (
+                    <li key={ch.character.mal_id} className="block pt-2.5">
+                      <CharacterCard character={ch} />
+                    </li>
+                  ))
+                : null}
             </ul>
           </div>
           <div>
             <h4 className="sm-headline">Reviews</h4>
             <ul>
-              {Array.isArray(reviews.data)
-                ? reviews.data.slice(0, 10).map((r) => (
+              {reviews.ok && Array.isArray(reviews.result.data)
+                ? reviews.result.data.slice(0, 10).map((r) => (
                     <li key={r.mal_id} className="block pt-2.5">
                       <ReviewCard review={r} />
                     </li>

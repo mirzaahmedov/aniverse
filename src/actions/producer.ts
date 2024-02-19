@@ -1,9 +1,7 @@
-import type { MultiResultsType } from "@/types/api";
+import type { MultiResultsType } from "@/types/response";
 import type { ProducerType } from "@/types/producer";
-import { baseURL } from "./constants";
+import api from "@/api";
 
 export async function getAnimeProducers() {
-  const response = await fetch(`${baseURL}/producers`);
-  const data: MultiResultsType<ProducerType> = await response.json();
-  return data;
+  return await api.fetch<MultiResultsType<ProducerType>>("/producers");
 }

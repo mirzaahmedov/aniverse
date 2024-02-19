@@ -1,11 +1,11 @@
 import { AnimeTitleType } from "./anime";
-import { AnimeCommonImagesType } from "./common";
+import { CommonImagesType } from "./common";
 
 export type ProducerType = {
   mal_id: number;
   url: string;
   titles: AnimeTitleType[];
-  images: AnimeCommonImagesType;
+  images: CommonImagesType;
   favorites: number;
   count: number;
   established: string | null;

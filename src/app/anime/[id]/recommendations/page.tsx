@@ -1,20 +1,16 @@
-import { getAnimeRecommendations } from "@/actions";
+import type { AnimePageProps } from "../types";
 import Avatar from "@/components/avatar";
+import { getAnimeRecommendations } from "@/actions/anime";
 
-type RecommendationsProps = {
-  params: {
-    id: number;
-  };
-};
-async function Recommendations({ params }: RecommendationsProps) {
-  const { id } = params;
-  const recommendations = await getAnimeRecommendations(id);
+async function Recommendations({ params }: AnimePageProps) {
+  const id = parseInt(params.id);
+  const res = await getAnimeRecommendations(id);
 
   return (
     <div>
       <ul>
-        {Array.isArray(recommendations?.data)
-          ? recommendations.data.map((r) => (
+        {res.ok && Array.isArray(res?.result?.data)
+          ? res.result.data.map((r) => (
               <li key={r.entry.mal_id}>
                 <h6>{r.entry.title}</h6>
                 <Avatar image={r.entry.images.jpg.image_url} alt="image" />

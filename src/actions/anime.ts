@@ -1,6 +1,10 @@
-import type { MultiResultsType, SingleResultType } from "@/types/api";
 import type {
-  AnimeQueryParamsType,
+  PaginationType,
+  PaginationFullType,
+  MultiResultsType,
+  SingleResultType,
+} from "@/types/response";
+import type {
   AnimeType,
   AnimeFullType,
   AnimeCharacterType,
@@ -10,77 +14,72 @@ import type {
   AnimeVideosType,
   AnimeStatsType,
   AnimeRecommendationType,
+  AnimeTopQueryParamsType,
   AnimeSearchQueryParamsType,
 } from "@/types/anime";
-import { baseURL } from "./constants";
+import api from "@/api";
 
 export async function getAnimeSearch(
   params: Partial<Record<keyof AnimeSearchQueryParamsType, string>>,
 ) {
-  const q = encodeURIComponent(params.q || "");
-  const page = encodeURIComponent(params.page || 1);
-  const limit = encodeURIComponent(params.limit || 12);
-  const type = encodeURIComponent(params.type || "");
-  const score = encodeURIComponent(params.score || "");
-  const status = encodeURIComponent(params.status || "");
-  const producers = encodeURIComponent(params.producers || "");
-  const start_date = encodeURIComponent(params.start_date || "");
-  const end_date = encodeURIComponent(params.end_date || "");
+  if (Number(params.score) > 9.99) {
+    params.score = String(9.99);
+  }
 
-  const response = await fetch(
-    `${baseURL}/anime?q=${q}&page=${page}&limit=${limit}&type=${type}&score=${score}&status=${status}&producers=${producers}&start_date=${start_date}&end_date=${end_date}`,
+  return await api.fetch<MultiResultsType<AnimeType, PaginationFullType>>(
+    "/anime",
+    params,
   );
-  const data: MultiResultsType<AnimeType> = await response.json();
-  return data;
 }
-export async function getTopAnime(params: AnimeQueryParamsType) {
-  const page = encodeURIComponent(params.page || 1);
-  const limit = encodeURIComponent(params.limit || 12);
-  const filter = encodeURIComponent(params.filter || "airing");
 
-  const response = await fetch(
-    `${baseURL}/top/anime?filter=${filter}&page=${page}&limit=${limit}`,
+export async function getTopAnime(
+  params: Partial<Record<keyof AnimeTopQueryParamsType, string>>,
+) {
+  return await api.fetch<MultiResultsType<AnimeType, PaginationFullType>>(
+    "/top/anime",
+    params,
   );
-  const data: MultiResultsType<AnimeType> = await response.json();
-  return data;
 }
+
 export async function getAnimeFullById(id: number) {
-  const response = await fetch(`${baseURL}/anime/${id}/full`);
-  const data: SingleResultType<AnimeFullType> = await response.json();
-  return data;
+  return await api.fetch<SingleResultType<AnimeFullType>>(`/anime/${id}/full`);
 }
+
 export async function getAnimeCharacters(id: number) {
-  const response = await fetch(`${baseURL}/anime/${id}/characters`);
-  const data: MultiResultsType<AnimeCharacterType> = await response.json();
-  return data;
+  return await api.fetch<MultiResultsType<AnimeCharacterType, PaginationType>>(
+    `/anime/${id}/characters`,
+  );
 }
+
 export async function getAnimeStaff(id: number) {
-  const response = await fetch(`${baseURL}/anime/${id}/staff`);
-  const data: MultiResultsType<AnimeStaffType> = await response.json();
-  return data;
+  return await api.fetch<MultiResultsType<AnimeStaffType>>(
+    `/anime/${id}/staff`,
+  );
 }
-export async function getAnimeReviews(id: number) {
-  const response = await fetch(`${baseURL}/anime/${id}/reviews`);
-  const data: MultiResultsType<AnimeReviewType> = await response.json();
-  return data;
+
+export async function getAnimeReviews(id: number, page: number = 1) {
+  return await api.fetch<MultiResultsType<AnimeReviewType, PaginationType>>(
+    `/anime/${id}/reviews`,
+    { page: String(page) },
+  );
 }
-export async function getAnimeEpisodes(id: number) {
-  const response = await fetch(`${baseURL}/anime/${id}/episodes`);
-  const data: MultiResultsType<AnimeEpisodeItemType> = await response.json();
-  return data;
+export async function getAnimeEpisodes(id: number, page: number = 1) {
+  return await api.fetch<
+    MultiResultsType<AnimeEpisodeItemType, PaginationType>
+  >(`/anime/${id}/episodes`, { page: String(page) });
 }
 export async function getAnimeVideos(id: number) {
-  const response = await fetch(`${baseURL}/anime/${id}/videos`);
-  const data: SingleResultType<AnimeVideosType> = await response.json();
-  return data;
+  return await api.fetch<SingleResultType<AnimeVideosType>>(
+    `/anime/${id}/videos`,
+  );
 }
 export async function getAnimeStats(id: number) {
-  const response = await fetch(`${baseURL}/anime/${id}/statistics`);
-  const data: SingleResultType<AnimeStatsType> = await response.json();
-  return data;
+  return await api.fetch<SingleResultType<AnimeStatsType>>(
+    `/anime/${id}/statistics`,
+  );
 }
 export async function getAnimeRecommendations(id: number) {
-  const response = await fetch(`${baseURL}/anime/${id}/videos`);
-  const data: MultiResultsType<AnimeRecommendationType> = await response.json();
-  return data;
+  return await api.fetch<MultiResultsType<AnimeRecommendationType>>(
+    `/anime/${id}/videos`,
+  );
 }

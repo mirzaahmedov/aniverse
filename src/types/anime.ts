@@ -1,12 +1,17 @@
 import type {
-  DaterangeType,
+  DateRangeType,
   MalURLType,
+  PersonType,
   RelationType,
   LinkType,
-  AnimeCommonImagesType,
+  ImageOptionsType,
+  CommonImagesType,
+  CommonQueryParamsType,
 } from "./common";
 
-export type AnimeQueryParamsTypeType =
+export type AnimeStatusType = "airing" | "complete" | "upcoming";
+export type AnimeRatingType = "g" | "pg" | "pg13" | "r17" | "r" | "rx";
+export type AnimeMediaType =
   | "tv"
   | "movie"
   | "ova"
@@ -16,101 +21,55 @@ export type AnimeQueryParamsTypeType =
   | "cm"
   | "pv"
   | "tv_special";
-export type AnimeQueryParamsFilterType =
+
+export type AnimeTopFilterType =
   | "airing"
   | "upcoming"
   | "bypopularity"
   | "favorite";
-export type AnimeQueryParamsRatingType =
-  | "g"
-  | "pg"
-  | "pg13"
-  | "r17"
-  | "r"
-  | "rx";
-
-export type AnimeQueryParamsType = {
-  type?: AnimeQueryParamsTypeType;
-  filter?: AnimeQueryParamsFilterType;
-  rating?: AnimeQueryParamsRatingType;
+export type AnimeTopQueryParamsType = {
+  type?: AnimeMediaType;
+  filter?: AnimeTopFilterType;
+  rating?: AnimeRatingType;
   sfw?: boolean;
   page?: number;
   limit?: number;
 };
-export type AnimeSearchQueryParamsType = {
-  sfw: boolean;
-  unapproved: boolean;
-  page: number;
-  limit: number;
-  q: string;
-  type: AnimeQueryParamsTypeType;
-  score: number;
-  min_score: number;
-  max_score: number;
-  status: AnimeStatusType;
+
+export type AnimeSearchQueryParamsType = CommonQueryParamsType & {
+  type: AnimeMediaType;
+  status: AnimeTopFilterType;
   rating: AnimeRatingType;
-  genres: string;
-  genres_exclude: string;
   order_by: string;
-  sort: string;
-  letter: string;
   producers: string;
-  start_date: string;
-  end_date: string;
 };
 
 export type AnimeSeasonType = "summer" | "winter" | "spring" | "fall";
 export type AnimeImagesType = {
-  jpg: {
-    image_url: string | null;
-    small_image_url: string | null;
-    large_image_url: string | null;
-  };
-  webp: {
-    image_url: string | null;
-    small_image_url: string | null;
-    large_image_url: string | null;
-  };
+  jpg: Pick<
+    ImageOptionsType,
+    "small_image_url" | "image_url" | "large_image_url"
+  >;
+  webp: Pick<
+    ImageOptionsType,
+    "small_image_url" | "image_url" | "large_image_url"
+  >;
 };
 
-export type AnimeTrailerImagesType = {
-  image_url: string | null;
-  small_image_url: string | null;
-  medium_image_url: string | null;
-  large_image_url: string | null;
-  maximum_image_url: string | null;
-};
 export type AnimeTrailerBaseType = {
   youtube_id: string | null;
   url: string | null;
   embed_url: string | null;
 };
-export type AnimeTrailerType = {
-  images: AnimeTrailerImagesType;
+export type AnimeTrailerType = AnimeTrailerBaseType & {
+  images: ImageOptionsType;
 };
 
 export type AnimeTitleType = {
   type: string;
   title: string;
 };
-export type AnimeTypeType =
-  | "TV"
-  | "OVA"
-  | "Movie"
-  | "Special"
-  | "ONA"
-  | "Music";
-export type AnimeStatusType =
-  | "Finished Airing"
-  | "Currently Airing"
-  | "Not yet aired";
-export type AnimeRatingType =
-  | "G - All Ages"
-  | "PG - Children"
-  | "PG-13 - Teens 13 or older"
-  | "R - 17+ (violence & profanity)"
-  | "R+ - Mild Nudity"
-  | "Rx - Hentai";
+
 export type AnimeBroadcastType = {
   day: string | null;
   time: string | null;
@@ -137,12 +96,12 @@ export type AnimeFullType = {
   title_japanese: string | null;
   /** @deprecated use titles instead */
   title_synonyms: string[] | null;
-  type: AnimeTypeType | null;
+  type: AnimeMediaType | null;
   source: string | null;
   episodes: number | null;
   status: AnimeStatusType | null;
   airing: boolean;
-  aired: DaterangeType;
+  aired: DateRangeType;
   duration: string | null;
   rating: AnimeRatingType | null;
   score: number | null;
@@ -174,22 +133,8 @@ export type AnimeType = Omit<
 >;
 
 export type AnimeCharacterImagesType = {
-  [field in keyof AnimeImagesType]: Omit<
-    AnimeImagesType[field],
-    "large_image_url"
-  >;
-};
-export type PeopleImagesType = {
-  jpg: {
-    image_url: AnimeCharacterImagesType["jpg"]["image_url"];
-  };
-};
-
-export type PersonType = {
-  mal_id: number;
-  url: string;
-  images: PeopleImagesType;
-  name: string;
+  jpg: Pick<ImageOptionsType, "small_image_url" | "image_url">;
+  webp: Pick<ImageOptionsType, "small_image_url" | "image_url">;
 };
 
 export type AnimeCharacterType = {
@@ -212,10 +157,8 @@ export type AnimeStaffType = {
 };
 
 type UserImagesType = {
-  [key in keyof AnimeImagesType]: Omit<
-    AnimeImagesType[key],
-    "small_image_url" | "large_image_url"
-  >;
+  jpg: Pick<ImageOptionsType, "image_url">;
+  webp: Pick<ImageOptionsType, "image_url">;
 };
 type UserMetaType = {
   username: string;
@@ -264,14 +207,14 @@ export type AnimeEpisodeItemType = Omit<AnimeEpisodeType, "synopsis"> & {
 
 export type AnimePromoVideoType = {
   title: "string";
-  trailer: AnimeTrailerBaseType;
+  trailer: AnimeTrailerType;
 };
 export type AnimeEpisodeVideoType = {
   mal_id: number;
   url: "string";
   title: "string";
   episode: "string";
-  images: AnimeCommonImagesType;
+  images: CommonImagesType;
 };
 export type AnimeMusicVideoType = {
   title: string;

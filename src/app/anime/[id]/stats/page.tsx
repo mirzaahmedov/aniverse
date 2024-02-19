@@ -1,24 +1,35 @@
+import type { AnimePageProps } from "../types";
 import { getAnimeStats } from "@/actions/anime";
-type StatsProps = {
-  params: {
-    id: number;
-  };
-};
-async function Stats({ params }: StatsProps) {
-  const { id } = params;
-  const stats = await getAnimeStats(id);
+
+async function Stats({ params }: AnimePageProps) {
+  const id = parseInt(params.id);
+  const res = await getAnimeStats(id);
+
+  if (!res.ok) {
+    throw new Error(res.message);
+  }
+
+  const {
+    total,
+    dropped,
+    on_hold,
+    watching,
+    completed,
+    plan_to_watch,
+    scores,
+  } = res.result.data;
 
   return (
     <div>
       <ul>
-        <li>Total {stats.data.total}</li>
-        <li>Dropped {stats.data.dropped}</li>
-        <li>On Hold {stats.data.on_hold}</li>
-        <li>Watching {stats.data.watching}</li>
-        <li>Completed {stats.data.completed}</li>
-        <li>Plan to watch {stats.data.plan_to_watch}</li>
+        <li>Total {total}</li>
+        <li>Dropped {dropped}</li>
+        <li>On Hold {on_hold}</li>
+        <li>Watching {watching}</li>
+        <li>Completed {completed}</li>
+        <li>Plan to watch {plan_to_watch}</li>
         <ul>
-          {stats.data.scores.map((s) => (
+          {scores.map((s) => (
             <li key={s.score}>
               <span>{s.score}</span> - <span>{s.votes} votes</span>{" "}
               <span>{s.percentage}%</span>

@@ -1,13 +1,4 @@
-import type { AnimeStatusType, AnimeTypeType } from "@/types/anime";
-
-export const animeTypes: AnimeTypeType[] = [
-  "TV",
-  "OVA",
-  "ONA",
-  "Movie",
-  "Music",
-  "Special",
-];
+export const animeTypes = ["TV", "OVA", "ONA", "Movie", "Music", "Special"];
 
 export const animeScores: Array<[number, string]> = [
   [10, "Masterpiece"],
@@ -22,7 +13,7 @@ export const animeScores: Array<[number, string]> = [
   [1, "Appalling"],
 ];
 
-export const animeStatus: Array<[AnimeStatusType, string]> = [
+export const animeStatus: Array<[string, string]> = [
   ["Not yet aired", "upcoming"],
   ["Finished Airing", "complete"],
   ["Currently Airing", "airing"],

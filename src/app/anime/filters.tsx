@@ -20,9 +20,9 @@ function Filters() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    getAnimeProducers().then((result) => {
-      if (Array.isArray(result.data)) {
-        setProducers(result.data);
+    getAnimeProducers().then((res) => {
+      if (res.ok && Array.isArray(res.result.data)) {
+        setProducers(res.result.data);
       }
     });
   }, []);

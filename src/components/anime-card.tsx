@@ -28,7 +28,7 @@ function AnimeCard({ anime }: AnimeCard) {
       <div className="mt-4 flex items-center justify-between">
         {score ? <ScoreBadge score={score} /> : null}
       </div>
-      <h6 className="mt-2 text-xl leading-tight">
+      <h6 className="mt-2 text-xl text-gray-950 leading-tight">
         {getAnimeTitle(titles, "English")}
       </h6>
       <div className="mt-2 flex items-center justify-between">

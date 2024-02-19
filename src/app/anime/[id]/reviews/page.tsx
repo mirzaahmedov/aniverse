@@ -1,27 +1,29 @@
-import { getAnimeReviews } from "@/actions";
+import type { AnimePageProps } from "../types";
 import ReviewCard from "@/components/review-card";
+import MoreReviews from "./more-reviews";
+import { getAnimeReviews } from "@/actions/anime";
 
-type ReviewsProps = {
-  params: {
-    id: number;
-  };
-};
-async function Reviews({ params }: ReviewsProps) {
-  const { id } = params;
-  const reviews = await getAnimeReviews(id);
+async function Reviews({ params }: AnimePageProps) {
+  const id = parseInt(params.id);
+  const res = await getAnimeReviews(id);
+
+  if (!res.ok) {
+    throw new Error(res.message);
+  }
 
   return (
     <div>
       <h4 className="sm-headline">Reviews</h4>
       <ul>
-        {Array.isArray(reviews.data)
-          ? reviews.data.map((r) => (
+        {Array.isArray(res.result.data)
+          ? res.result.data.map((r) => (
               <li key={r.mal_id} className="block pt-2.5">
                 <ReviewCard review={r} />
               </li>
             ))
           : null}
       </ul>
+      {res.result.pagination.has_next_page ? <MoreReviews id={id} /> : null}
     </div>
   );
 }

@@ -8,6 +8,14 @@ html {
   background-color: theme("colors.gray[50]");
 }
 
+a {
+  color: theme("colors.blue.500");
+}
+th,
+td {
+  padding: theme("size.2");
+}
+
 @layer components {
   .headline {
     margin-top: theme("size.40");

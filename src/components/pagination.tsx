@@ -36,7 +36,8 @@ function Pagination({ pageCount, currentPage }: PaginationProps) {
               href={`${pathname}?${getNewSearchParams(page, searchParams)}`}
               className={twMerge(
                 "inline-block text-center leading-10 w-10 h-10 rounded-full",
-                currentPage === page && "text-gray-500 bg-gray-100",
+                currentPage === page &&
+                  "text-gray-500 bg-gray-100 pointer-events-none",
               )}
             >
               {page}

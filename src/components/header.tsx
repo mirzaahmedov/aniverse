@@ -41,7 +41,7 @@ function Header() {
           <Link href="/">Aniverse</Link>
         </h1>
         <nav>
-          <ul className="flex items-center justify-center gap-20 font-medium uppercase">
+          <ul className="flex items-center justify-center gap-20 text-sm font-medium uppercase">
             {links.map(({ path, label }) => (
               <li key={path}>
                 <Link

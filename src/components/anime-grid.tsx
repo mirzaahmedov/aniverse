@@ -3,16 +3,18 @@ import { Fragment } from "react";
 import AnimeCard from "./anime-card";
 
 type AnimeGridProps = {
-  animes: AnimeType[];
+  anime: AnimeType[];
 };
-function AnimeGrid({ animes }: AnimeGridProps) {
+function AnimeGrid({ anime }: AnimeGridProps) {
   return (
     <div className="grid grid-cols-4 gap-10">
-      {animes.map((a) => (
-        <Fragment key={a.mal_id}>
-          <AnimeCard anime={a} />
-        </Fragment>
-      ))}
+      {Array.isArray(anime)
+        ? anime.map((a) => (
+            <Fragment key={a.mal_id}>
+              <AnimeCard anime={a} />
+            </Fragment>
+          ))
+        : null}
     </div>
   );
 }
